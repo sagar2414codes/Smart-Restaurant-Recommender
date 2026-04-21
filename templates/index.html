@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🍽️ Smart Restaurant Recommender</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <div class="logo">
+                    <h1>🍽️ Smart Restaurant Recommender</h1>
+                    <p>Discover your perfect restaurant based on cuisine & budget</p>
+                </div>
+                <div class="stats-bar">
+                    <div class="stat">
+                        <span class="stat-value" id="totalRestaurants">0</span>
+                        <span class="stat-label">Restaurants</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-value" id="totalCuisines">0</span>
+                        <span class="stat-label">Cuisines</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-value" id="avgRating">0</span>
+                        <span class="stat-label">Avg Rating</span>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Sidebar -->
+            <aside class="sidebar">
+                <div class="filters-container">
+                    <h2>🔍 Filters</h2>
+
+                    <!-- Quick Search -->
+                    <div class="filter-group">
+                        <label>Search Restaurants</label>
+                        <input type="text" id="searchInput" placeholder="Search by name or cuisine..." class="search-input">
+                        <div id="searchResults" class="search-results"></div>
+                    </div>
+
+                    <!-- Cuisines Filter -->
+                    <div class="filter-group">
+                        <label>🍜 Select Cuisines</label>
+                        <div id="cuisinesContainer" class="cuisines-container">
+                            <p>Loading cuisines...</p>
+                        </div>
+                    </div>
+
+                    <!-- Budget Filter -->
+                    <div class="filter-group">
+                        <label>💰 Budget Range</label>
+                        <div class="budget-inputs">
+                            <input type="number" id="minBudget" placeholder="Min" class="budget-input">
+                            <span>-</span>
+                            <input type="number" id="maxBudget" placeholder="Max" class="budget-input">
+                        </div>
+                        <input type="range" id="budgetSlider" min="0" max="10000" value="5000" class="slider">
+                        <div class="budget-display">
+                            <span id="budgetDisplay">₽0 - ₽5000</span>
+                        </div>
+                    </div>
+
+                    <!-- Rating Filter -->
+                    <div class="filter-group">
+                        <label>⭐ Minimum Rating</label>
+                        <div class="rating-select">
+                            <select id="minRating" class="select-input">
+                                <option value="0">Any Rating</option>
+                                <option value="2">2+ Stars</option>
+                                <option value="3">3+ Stars</option>
+                                <option value="3.5">3.5+ Stars</option>
+                                <option value="4">4+ Stars</option>
+                                <option value="4.5">4.5+ Stars</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Results Limit -->
+                    <div class="filter-group">
+                        <label>📊 Show Results</label>
+                        <input type="range" id="maxResults" min="1" max="50" value="20" class="slider">
+                        <div class="results-display">
+                            <span id="resultsDisplay">20</span> restaurants
+                        </div>
+                    </div>
+
+                    <!-- Search Button -->
+                    <button class="btn btn-primary btn-search" onclick="searchRestaurants()">
+                        🔍 Find Restaurants
+                    </button>
+
+                    <!-- Export Button -->
+                    <button class="btn btn-secondary" onclick="exportResults()" id="exportBtn" style="display: none;">
+                        📥 Export as CSV
+                    </button>
+                </div>
+            </aside>
+
+            <!-- Content Area -->
+            <section class="content">
+                <!-- Loading State -->
+                <div id="loadingState" class="loading-state" style="display: none;">
+                    <div class="spinner"></div>
+                    <p>Finding your perfect restaurants...</p>
+                </div>
+
+                <!-- No Results State -->
+                <div id="noResultsState" class="no-results-state">
+                    <div class="empty-state">
+                        <span class="empty-icon">🍽️</span>
+                        <h3>No restaurants selected yet</h3>
+                        <p>👈 Select your preferred cuisines and budget to get recommendations!</p>
+                    </div>
+                </div>
+
+                <!-- Results Container -->
+                <div id="resultsContainer" class="results-container" style="display: none;">
+                    <div class="results-header">
+                        <h2 id="resultsTitle">Recommendations</h2>
+                        <span id="resultsCount" class="results-count">0 restaurants found</span>
+                    </div>
+                    <div id="restaurantsList" class="restaurants-list"></div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Restaurant Card Modal -->
+    <div id="restaurantModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <span class="modal-close" onclick="closeModal()">&times;</span>
+            <div id="modalBody"></div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
